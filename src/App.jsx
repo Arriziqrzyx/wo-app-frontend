@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/PrivateRoute";
-import WorkOrderCreate from "./pages/WorkOrderCreate";
+import WorkOrderCreate from "./pages/workOrderCreate";
 import WorkOrderDetail from "./pages/workOrderDetail";
 
 export default function App() {

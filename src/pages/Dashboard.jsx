@@ -16,9 +16,9 @@ export default function Dashboard() {
 
   // 🔹 Fetch WO setiap kali token atau organisasi aktif berubah
   useEffect(() => {
-    console.log("🎯 Dashboard useEffect triggered");
-    console.log("🎯 Active Org:", user?.activeOrganization);
-    console.log("🎯 Token:", token);
+    // console.log("🎯 Dashboard useEffect triggered");
+    // console.log("🎯 Active Org:", user?.activeOrganization);
+    // console.log("🎯 Token:", token);
 
     if (token) dispatch(fetchWorkOrders());
   }, [dispatch, token, user?.activeOrganization]);

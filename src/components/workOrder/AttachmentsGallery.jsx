@@ -5,10 +5,25 @@ import { motion } from "framer-motion";
 export default function AttachmentsGallery({
   files = [],
   title,
-  baseUrl = "http://localhost:5000",
+  baseUrl,
   className = "",
 }) {
   if (!files || files.length === 0) return null;
+
+  // Always take base URL from environment for production.
+  const envApi = import.meta.env.VITE_API_URL;
+  if (!envApi) {
+    console.error(
+      "AttachmentsGallery: VITE_API_URL is not defined in environment variables."
+    );
+    return null;
+  }
+
+  // strip trailing /api if developer put the API root in VITE_API_URL
+  const resolvedBase = envApi.replace(/\/api\/?$/i, "");
+
+  const joinUrl = (b, p) =>
+    `${b.replace(/\/$/, "")}/${String(p).replace(/^\//, "")}`;
 
   return (
     <div className={`mb-6 ${className}`}>
@@ -24,13 +39,13 @@ export default function AttachmentsGallery({
           >
             {/\.(jpg|jpeg|png|gif)$/i.test(file) ? (
               <img
-                src={`${baseUrl}${file}`}
+                src={joinUrl(resolvedBase, file)}
                 alt={`${title || "Lampiran"} ${idx + 1}`}
                 className="object-cover w-full h-full"
               />
             ) : (
               <a
-                href={`${baseUrl}${file}`}
+                href={joinUrl(resolvedBase, file)}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-center w-full h-full text-center text-xs underline"
