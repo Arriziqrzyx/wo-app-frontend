@@ -9,7 +9,7 @@ export default function Login() {
   const { token, loading, error } = useSelector((s) => s.auth);
 
   const [form, setForm] = useState({
-    email: "",
+    username: "",
     password: "",
     organization: "YPP",
   });
@@ -42,7 +42,14 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser(form));
+
+    const payload = {
+      email: `${form.username}@mail.com`,
+      password: form.password,
+      organization: form.organization,
+    };
+
+    dispatch(loginUser(payload));
   };
 
   return (
@@ -68,12 +75,13 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
               <input
-                type="email"
-                name="email"
-                placeholder="Email"
+                type="text"
+                name="username"
+                placeholder="Username"
                 className="input input-bordered w-full"
                 onChange={handleChange}
               />
+
               <input
                 type="password"
                 name="password"
