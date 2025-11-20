@@ -234,14 +234,17 @@ export default function WorkOrderDetail() {
             onRejectTarget={onRejectTarget}
           />
 
-          <StaffProgress
-            selected={selected}
-            isAssignedStaff={isAssignedStaff}
-            onComplete={(payload) => {
-              setToast({ type: payload.type, text: payload.text });
-              setTimeout(() => setToast(null), 3000);
-            }}
-          />
+          {(selected.status === "ASSIGNED_TO_STAFF" ||
+            selected.status === "IN_PROGRESS") && (
+            <StaffProgress
+              selected={selected}
+              isAssignedStaff={isAssignedStaff}
+              onComplete={(payload) => {
+                setToast({ type: payload.type, text: payload.text });
+                setTimeout(() => setToast(null), 3000);
+              }}
+            />
+          )}
 
           {/* REQUESTER CONFIRMATION SECTION */}
           {user?.id === selected?.requesterId?._id &&

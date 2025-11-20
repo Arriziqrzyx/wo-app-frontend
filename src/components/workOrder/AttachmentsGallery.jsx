@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 export default function AttachmentsGallery({
   files = [],
   title,
+  // eslint-disable-next-line no-unused-vars
   baseUrl,
   className = "",
 }) {

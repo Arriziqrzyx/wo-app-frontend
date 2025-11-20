@@ -76,7 +76,7 @@ export default function StaffProgress({
 
       {/* REQUEST CONFIRMATION + optional foto */}
       {selected.status === "IN_PROGRESS" && (
-        <div className="mt-4 border-t pt-4 flex flex-col gap-3">
+        <div className="mt-4 flex flex-col gap-3">
           <h3 className="font-semibold mb-2">
             Lampirkan Foto Hasil Pekerjaan (opsional)
           </h3>
