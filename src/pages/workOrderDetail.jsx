@@ -75,15 +75,47 @@ export default function WorkOrderDetail() {
   // staff progress and assign handled inside components
 
   // 🔹 Supervisor Context
+  // Prefer backend-provided `supervisorRoleContext` when present, but also
+  // allow FE to check department-level supervisor fields so the correct UI
+  // appears when the same user supervises both departments.
+  const currentUserId = user?.id || user?._id || null;
+
+  const isSupervisorOfDepartment = (dept) => {
+    if (!dept) return false;
+    // common shapes: dept.supervisors = [{_id,...}] or dept.supervisorId = 'id' or {_id}
+    if (Array.isArray(dept.supervisors) && dept.supervisors.length > 0) {
+      return dept.supervisors.some((s) => {
+        if (!s) return false;
+        if (typeof s === "string") return s === currentUserId;
+        return (
+          (s._id && s._id === currentUserId) || (s.id && s.id === currentUserId)
+        );
+      });
+    }
+    if (dept.supervisorId) {
+      const sv = dept.supervisorId;
+      if (typeof sv === "string") return sv === currentUserId;
+      return (
+        (sv._id && sv._id === currentUserId) ||
+        (sv.id && sv.id === currentUserId)
+      );
+    }
+    return false;
+  };
+
   const showSupervisorButtons =
     user?.role === "supervisor" &&
     selected?.status === "WAITING_SUPERVISOR_APPROVAL" &&
-    supervisorRoleContext === "requester";
+    (supervisorRoleContext === "requester" ||
+      isSupervisorOfDepartment(
+        selected?.requesterDepartment || selected?.requesterDept || null
+      ));
 
   const showTargetSupervisorButtons =
     user?.role === "supervisor" &&
     selected?.status === "WAITING_TARGET_REVIEW" &&
-    supervisorRoleContext === "target";
+    (supervisorRoleContext === "target" ||
+      isSupervisorOfDepartment(selected?.departmentId));
 
   const formatDate = (dateStr) => {
     try {
@@ -259,7 +291,7 @@ export default function WorkOrderDetail() {
             )}
 
           <div className="mt-6 text-right text-sm text-gray-500">
-            Dilihat oleh: <strong>{user?.name}</strong> ({user?.role})
+            Dilihat oleh: <strong>{user?.name}</strong>
           </div>
         </motion.div>
       </div>
