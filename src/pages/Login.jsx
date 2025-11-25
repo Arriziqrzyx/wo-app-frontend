@@ -10,13 +10,12 @@ export default function Login() {
 
   const [form, setForm] = useState({
     username: "",
-    password: "",
     organization: "YPP",
   });
 
   // === Avatar State ===
   const [isTyping, setIsTyping] = useState(false);
-  const [frameIndex, setFrameIndex] = useState(0); // untuk run1, run2
+  const [frameIndex, setFrameIndex] = useState(0);
   const typingTimer = useRef(null);
 
   const runFrames = ["/run1.png", "/run2.png"];
@@ -26,15 +25,11 @@ export default function Login() {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
 
-    // User mengetik → aktifkan animasi
+    // Avatar typing animation
     setIsTyping(true);
-
-    // Ganti frame setiap ketikan
     setFrameIndex((prev) => (prev + 1) % runFrames.length);
 
-    // Reset timer (kembali idle jika berhenti 500ms)
     if (typingTimer.current) clearTimeout(typingTimer.current);
-
     typingTimer.current = setTimeout(() => {
       setIsTyping(false);
     }, 300);
@@ -45,7 +40,7 @@ export default function Login() {
 
     const payload = {
       email: `${form.username}@mail.com`,
-      password: form.password,
+      password: "1234", // Hardcoded password
       organization: form.organization,
     };
 
@@ -82,13 +77,6 @@ export default function Login() {
                 onChange={handleChange}
               />
 
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                className="input input-bordered w-full"
-                onChange={handleChange}
-              />
               <select
                 name="organization"
                 className="select select-bordered w-full"
@@ -112,7 +100,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* FOOTER SELALU DI BAWAH */}
       <Footer />
     </div>
   );
